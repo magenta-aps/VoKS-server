@@ -1,0 +1,18 @@
+{
+  "name": "voks-websocket-server",
+  "version": "0.0.1",
+  "description": "VOKS websocket server",
+  "main": "run.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node run.js"
+  },
+  "dependencies": {
+    "colors": "^1.1.2",
+    "console-stamp": "^0.2",
+    "node-persist": "*",
+    "ws": "^0.8.0"
+  },
+  "author": "Baltic Amadeus",
+  "license": "MPL"
+}
