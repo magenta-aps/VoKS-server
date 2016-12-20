@@ -24,15 +24,24 @@
                 cert: fs.readFileSync(httpConfig.secure.certificate)
             };
 
-            httpServer = require('https').createServer(options, _listener).listen(httpConfig.secure.port);
+            httpServer = require('https').createServer(options, _listener);
         } else {
-            httpServer = require('http').createServer(_listener).listen(httpConfig.port);
+            httpServer = require('http').createServer(_listener);
         }
 
         debug.separate();
         debug.warn('Started HTTP server');
 
-        return httpServer;
+        return {
+            server: httpServer,
+            listen: function() {
+                httpServer.listen(
+                    httpConfig.secure.enabled
+                        ? httpConfig.secure.port
+                        : httpConfig.port
+                );
+            }
+        }
     }
 
     module.exports = httpServer;

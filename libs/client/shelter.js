@@ -15,6 +15,7 @@
         this.id = id;
         this.shelterId = shelterId;
         this.connection = connection;
+        this.ipAddress = connection._socket.remoteAddress
     }
 
     extend(BaseModel, ShelterClient);

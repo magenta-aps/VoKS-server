@@ -35,7 +35,7 @@
             if(true === cache && 'undefined' !== typeof options.id) {
                 if(recipients.length === 0) {
                     queue.add(options.id, message);
-                    debug.log('Caching', message);
+                    debug.log('Caching1', JSON.stringify(message));
                 }
             }
 
@@ -45,7 +45,7 @@
                 // unreachable so this caches the message
                 if(false === response) {
                     queue.add(options.id, message);
-                    debug.log('Caching', message);
+                    debug.log('Caching2', JSON.stringify(message));
                 }
             }
         }

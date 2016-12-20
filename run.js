@@ -16,7 +16,8 @@
     var QueueEngine = require('./libs/queue'),
         storage = require('./libs/storage/factory').getEngine('file'),
         queue = new QueueEngine(storage, 'messages'),
-        debug = require('./libs/debug');
+        debug = require('./libs/debug'),
+        env = require('./configs/env');
 
     // assign container to the global namespace
     global.container = require('./libs/container');
@@ -25,6 +26,7 @@
     container.register('queue', queue);
     container.register('profile', require('./libs/client/profile'));
     container.register('debug', debug);
+    container.register('env', env);
 
     var server = websockets(new http(false));
     server.start();

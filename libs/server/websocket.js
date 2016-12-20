@@ -10,6 +10,8 @@
     function Websockets(httpServer) {
         var debug = container.get('debug'),
             ClientFactory = require('../client/factory'),
+            ipWhitelist = require('../client/utils/ip.whitelist'),
+            access = require('../client/utils/access'),
             httpConfig = require('../../configs/http'),
             connectionPool = require('../connection.pool');
 
@@ -21,7 +23,7 @@
             var ws = require('ws').Server;
 
             var server = new ws({
-                server: httpServer
+                server: httpServer.server
             });
 
             server.on('connection', onConnection);
@@ -33,22 +35,52 @@
             debug.warn('Listening port: ' + (httpConfig.secure.enabled ? httpConfig.secure.port : httpConfig.port));
             debug.separate();
 
+            // update ip whitelist before starting the listener
+            ipWhitelist.fetchUpdate();
+            httpServer.listen();
+
             function onConnection(socket) {
-                var client = ClientFactory.createClient(socket);
+                /**
+                 * 1. pull ip list from systemIpCheck api
+                 * 2. on new connection check if ip is whitelisted
+                 * 3. on system school list ip change update whitelist
+                 * 3.1. rerun the whitelist check
+                 * 4. send reset messages to shelters that don't belong to the ip list
+                 * 5(?). on front-end make sure no same tabs with shelter are open
+                 */
+                var clientDefinition = ClientFactory.createClient(socket),
+                    client = clientDefinition.client,
+                    properties = clientDefinition.properties;
+
                 connectionPool.add(client);
+
+                // if the client is shelter check if it's allowed to
+                // connect based on the list of assigned ip
+                // addresses to schools
+                if(properties.isShelter()) {
+                    var assigned = ipWhitelist.check(client.id, socket._socket.remoteAddress);
+
+                    if(false === assigned) {
+                        access.check(client.id);
+                        console.log('not good');
+                        return;
+                    } else {
+                        console.log('all good');
+                    }
+                }
+
                 client.onConnection();
 
-                socket.on('message', function(message) {
-                    var message = JSON.parse(message),
-                    response = client.handleMessage(message);
-                    // if clients' message handler returns false, the message should
-                    // be passed down to the general message handler
+                socket.on('message', function (message) {
+                    var message = JSON.parse(message);
+
+                    client.handleMessage(message);
                 });
 
                 socket.on('close', function () {
                     // only notify shelter and the clients if the
                     // connection hasn't been closed manually
-                    if(false === client.hasClosedConnection()) {
+                    if (false === client.hasClosedConnection()) {
                         client.onDisconnect();
                     }
                     connectionPool.remove(client);

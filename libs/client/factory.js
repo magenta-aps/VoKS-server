@@ -33,7 +33,10 @@
                 client = new PhpClient(clientType.clientId, clientType.shelterId, socket);
             }
 
-            return client;
+            return {
+                client: client,
+                properties: clientType
+            };
         }
 
 

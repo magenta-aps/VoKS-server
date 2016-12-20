@@ -37,6 +37,15 @@
     extend(BaseModel, DeviceClient);
 
     /**
+     * Returns Client's IP Address
+     *
+     * @returns {*}
+     */
+    DeviceClient.prototype.getIpAddress = function() {
+        return this.ipAddress || this.connection._socket.remoteAddress;
+    };
+
+    /**
      * Sets current trigger status
      *
      * If the client has disconnected but has triggered

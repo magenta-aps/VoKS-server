@@ -21,7 +21,8 @@
             getAll: getAll,
             remove: remove,
             filter: filter,
-            update: update
+            update: update,
+            getShelterClients: getShelterClients
         };
 
         /**
@@ -69,7 +70,7 @@
                 index = 0;
 
             for (index; index < matched.length; index++) {
-                for(var key in update) {
+                for (var key in update) {
                     matched[index][key] = update[key];
                 }
             }
@@ -93,6 +94,24 @@
                 }
 
                 if (found === Object.keys(properties).length) {
+                    matched.push(_clients[index]);
+                }
+            }
+
+            return matched;
+        }
+
+        /**
+         * Returns all connected shelter clients
+         *
+         * @returns {Array}
+         */
+        function getShelterClients() {
+            var matched = [],
+                index = 0;
+
+            for (index; index < _clients.length; index++) {
+                if (_clients[index].id === _clients[index].shelterId) {
                     matched.push(_clients[index]);
                 }
             }

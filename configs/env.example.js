@@ -11,6 +11,7 @@
     env.appDir = __dirname + '/../';
     env.pingInterval = 3000; // ping interval in ms
     env.cacheTtl = 1800;
+    env.backendUrl = 'url';
 
     module.exports = env;
 })();
