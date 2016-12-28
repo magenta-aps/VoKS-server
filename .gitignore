@@ -1,2 +1,4 @@
 configs/env.js
 configs/http.js
+cache
+node_modules
