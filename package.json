@@ -10,7 +10,7 @@
   "dependencies": {
     "colors": "^1.1.2",
     "console-stamp": "^0.2",
-    "node-persist": "*",
+    "node-persist": "2.*",
     "ws": "^0.8.0"
   },
   "author": "Baltic Amadeus",
