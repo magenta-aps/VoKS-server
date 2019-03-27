@@ -59,14 +59,20 @@
                 // addresses to schools
                 if(properties.isShelter()) {
                     var assigned = ipWhitelist.check(client.id, socket._socket.remoteAddress);
+                    //
+                    debug.warn('Client ID: ' + client.id);
+                    debug.separate();
+                    debug.warn('Remote Address: ' + socket._socket.remoteAddress);
+                    debug.separate();
 
                     if(false === assigned) {
                         access.check(client.id);
-                        console.log('not good');
+                        debug.warn('not good');
                         return;
                     } else {
-                        console.log('all good');
+                        debug.warn('all good');
                     }
+                    debug.separate();
                 }
 
                 client.onConnection();
