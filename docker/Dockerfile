@@ -10,4 +10,8 @@ COPY . .
 
 EXPOSE 9001
 
-CMD ["node", "run.js"]
+ARG WS_SERVER_DEBUG=true
+ENV WS_SERVER_DEBUG=${WS_SERVER_DEBUG}
+
+RUN chmod +x ./docker/entrypoint.sh
+ENTRYPOINT [ "./docker/entrypoint.sh" ]
