@@ -61,8 +61,8 @@ unit-test:
 #    - name: postgres:11
 #      alias: db
 # TODO shelter image
-#  variables:
-#    SOME_VARIABLE: bevdev
+  variables:
+    GIT_STRATEGY: none
   script:
     - echo "Running tests"
  # TODO
