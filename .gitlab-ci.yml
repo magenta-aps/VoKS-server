@@ -1,0 +1,97 @@
+# For the project at https://git.magenta.dk/bcomesafe/TODO
+
+# For `docker push` to work, the following envionment variables have to set in
+# the Gitlab UI.
+# RELEASE_REGISTRY_USER
+# RELEASE_REGISTRY_PASSWORD
+
+stages:
+  - lint-build
+  - test
+  - release
+
+image: docker:19.03
+
+services:
+    - name: docker:19.03-dind
+      entrypoint: ["env", "-u", "DOCKER_HOST"]
+      command: ["dockerd-entrypoint.sh"]
+
+variables:
+  # When using dind service we need to instruct docker, to talk with the
+  # daemon started inside of the service. The daemon is available with
+  # a network connection instead of the default /var/run/docker.sock socket.
+  #
+  # The 'docker' hostname is the alias of the service container as described at
+  # https://docs.gitlab.com/ee/ci/docker/using_docker_images.html#accessing-the-services
+  DOCKER_HOST: tcp://docker:2375/
+  # When using dind, it's wise to use the overlayfs driver for
+  # improved performance.
+  DOCKER_DRIVER: overlay2
+
+  # Project variables
+  RELEASE_REGISTRY: docker.io
+  RELEASE_REGISTRY_IMAGE: index.docker.io/magentaaps/bcs-ws-server
+
+  IMAGE_SHA: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
+
+  IMAGE: magentaaps/bcs-ws-server
+
+
+# Build stage
+#############
+
+build:
+  stage: lint-build
+  script:
+    # Login to GitLab registry
+    - echo ${CI_REGISTRY_PASSWORD} | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
+    - docker build -f docker/Dockerfile --pull --tag ${IMAGE_SHA} .
+    - docker push ${IMAGE_SHA}
+
+
+# Test stage
+############
+
+unit-test:
+  stage: test
+  image:
+    name: ${IMAGE_SHA}
+#  services:
+#    - name: postgres:11
+#      alias: db
+# TODO shelter image
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - echo "Running tests"
+ # TODO
+
+
+# Release stage
+###############
+release-master:
+  stage: release
+  only:
+    - /master/
+  script:
+    # Create image tags in YYYY-MM-DD_commit-sha format
+    - export COMMIT_TIME=$(git show -s --format=%ci $CI_COMMIT_SHA) 
+    - export IMAGE_TAG=${IMAGE}:${COMMIT_TIME}_${CI_COMMIT_SHORT_SHA}
+
+    # Login to GitLab registry
+    - echo ${CI_REGISTRY_PASSWORD} | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
+    - docker pull ${IMAGE_SHA}
+
+    # Login to Docker Hub registry
+    - docker login -u ${RELEASE_REGISTRY_USER} -p ${RELEASE_REGISTRY_PASSWORD} ${RELEASE_REGISTRY}
+    - echo Tagging with ${IMAGE_TAG}
+    - docker tag ${IMAGE_SHA} ${IMAGE_TAG}
+    - echo Tagging with ${IMAGE}:latest
+    - docker tag ${IMAGE_SHA} ${IMAGE}:latest
+    - docker push ${IMAGE_TAG}
+    - docker push ${IMAGE}:latest
+  
+
+
+
