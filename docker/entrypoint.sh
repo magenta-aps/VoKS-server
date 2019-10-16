@@ -9,4 +9,4 @@ else
     rm -rf dev-environment/
 fi
 
-node run.js
+exec "$@"

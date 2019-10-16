@@ -15,3 +15,5 @@ ENV WS_SERVER_DEBUG=${WS_SERVER_DEBUG}
 
 RUN chmod +x ./docker/entrypoint.sh
 ENTRYPOINT [ "./docker/entrypoint.sh" ]
+
+CMD ["node", "run.js"]
