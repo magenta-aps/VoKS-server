@@ -76,7 +76,7 @@ release-master:
     - /master/
   script:
     # Create image tags in YYYY-MM-DD_commit-sha format
-    - export COMMIT_TIME=$(git show -s --format=%ci $CI_COMMIT_SHA) 
+    - export COMMIT_TIME=$(git show -s --format=%cd --date=short ${CI_COMMIT_SHA})
     - export IMAGE_TAG=${IMAGE}:${COMMIT_TIME}_${CI_COMMIT_SHORT_SHA}
 
     # Login to GitLab registry
