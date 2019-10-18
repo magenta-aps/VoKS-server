@@ -1,0 +1,9 @@
+{
+    "secure": {
+        "enabled": false,
+        "port": 9001,
+        "key": "",
+        "certificate": ""
+    },
+    "port": 9001
+}

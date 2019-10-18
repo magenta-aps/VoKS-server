@@ -1,0 +1,9 @@
+{
+    "secure": {
+        "enabled": true,
+        "port": 9001,
+        "key": "/etc/pki/tls/private/bcomesafe.key",
+        "certificate": "/etc/pki/tls/certs/bcomesafe.crt"
+    },
+    "port": 9001
+}

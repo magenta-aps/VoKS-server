@@ -1,0 +1,9 @@
+{
+    "secure": {
+        "enabled": true,
+        "port": 9001,
+        "key": "/var/www/html/certificates/bcomesafe.key",
+        "certificate": "/var/www/html/certificates/bcomesafe.crt"
+    },
+    "port": 9001
+}
