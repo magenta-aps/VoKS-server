@@ -18,6 +18,7 @@
             response.end();
         }
 
+        debug.separate();
         if (httpConfig.secure.enabled) {
             var options = {
                 key: fs.readFileSync(httpConfig.secure.key),
@@ -25,12 +26,11 @@
             };
 
             httpServer = require('https').createServer(options, _listener);
+            debug.warn('Started HTTPS server');
         } else {
             httpServer = require('http').createServer(_listener);
+            debug.warn('Started HTTP server');
         }
-
-        debug.separate();
-        debug.warn('Started HTTP server');
 
         return {
             server: httpServer,
