@@ -55,18 +55,18 @@ build:
 
 unit-test:
   stage: test
-  image:
-    name: ${IMAGE_SHA}
 #  services:
 #    - name: postgres:11
 #      alias: db
 # TODO shelter image
   variables:
     GIT_STRATEGY: none
+    NODE_ENV: local_https
+    OVERRIDE_CERT_PATH: "true"
   script:
-    - echo "Running tests"
- # TODO
-
+    - echo ${CI_REGISTRY_PASSWORD} | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
+    - docker pull ${IMAGE_SHA}
+    - docker run ${IMAGE_SHA}
 
 # Release stage
 ###############
