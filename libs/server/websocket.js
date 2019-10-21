@@ -39,7 +39,7 @@
             ipWhitelist.fetchUpdate();
             httpServer.listen();
 
-            function onConnection(socket) {
+            function onConnection(socket, req) {
                 /**
                  * 1. pull ip list from systemIpCheck api
                  * 2. on new connection check if ip is whitelisted
@@ -48,7 +48,7 @@
                  * 4. send reset messages to shelters that don't belong to the ip list
                  * 5(?). on front-end make sure no same tabs with shelter are open
                  */
-                var clientDefinition = ClientFactory.createClient(socket),
+                var clientDefinition = ClientFactory.createClient(socket, req),
                     client = clientDefinition.client,
                     properties = clientDefinition.properties;
 

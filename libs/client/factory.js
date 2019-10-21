@@ -19,8 +19,9 @@
             createClient: createClient
         };
 
-        function createClient(socket) {
-            var clientType = _getClientParameters(socket.upgradeReq.url),
+        function createClient(socket, req) {
+            var url = req ? req.url : socket.upgradeReq.url;
+            var clientType = _getClientParameters(url),
                 client;
 
             if (clientType.isMobile()) {
