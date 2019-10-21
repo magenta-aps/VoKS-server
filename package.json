@@ -1,7 +1,7 @@
 {
-  "name": "bcs-ws-server",
+  "name": "voks-websocket-server",
   "version": "0.0.1",
-  "description": "BCS websocket server",
+  "description": "VOKS websocket server",
   "main": "run.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,7 +11,7 @@
     "colors": "^1.1.2",
     "console-stamp": "^0.2",
     "node-persist": "2.*",
-    "ws": "^7.1.2"
+    "ws": "^0.8.0"
   },
   "author": "Baltic Amadeus",
   "license": "MPL"
