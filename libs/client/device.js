@@ -42,7 +42,7 @@
      * @returns {*}
      */
     DeviceClient.prototype.getIpAddress = function() {
-        return this.ipAddress || this.connection._socket.remoteAddress;
+        return this.ipAddress || this.connection._socket.remoteAddress.replace('::ffff:', '');
     };
 
     /**

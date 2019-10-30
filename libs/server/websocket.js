@@ -58,11 +58,13 @@
                 // connect based on the list of assigned ip
                 // addresses to schools
                 if(properties.isShelter()) {
-                    var assigned = ipWhitelist.check(client.id, socket._socket.remoteAddress);
+                    var remoteAddress = socket._socket.remoteAddress;
+                    remoteAddress = remoteAddress.replace('::ffff:', '');
+                    var assigned = ipWhitelist.check(client.id, remoteAddress);
                     //
                     debug.warn('Client ID: ' + client.id);
                     debug.separate();
-                    debug.warn('Remote Address: ' + socket._socket.remoteAddress);
+                    debug.warn('Remote Address: ' + remoteAddress);
                     debug.separate();
 
                     if(false === assigned) {
