@@ -11,7 +11,7 @@
     "colors": "^1.1.2",
     "console-stamp": "^0.2",
     "node-persist": "2.*",
-    "ws": "^0.8.0"
+    "ws": "^7.2.0"
   },
   "author": "Baltic Amadeus",
   "license": "MPL"
